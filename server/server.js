@@ -2,7 +2,8 @@ const express = require("express");
 const connectToDB = require("./config/db");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
-const authRouter = require("./Routes/authRoute")
+const authRouter = require("./Routes/authRoute");
+const adminProductRoute = require("./Routes/admin/productRoute")
 
 connectToDB();
 
@@ -26,6 +27,7 @@ app.use(
 
 app.use(cookieParser());
 app.use(express.json());
-app.use("/api/auth",authRouter)
+app.use("/api/auth", authRouter);
+app.use("/api/admin/products",adminProductRoute)
 
 app.listen(PORT,()=> console.log("Server is now running on",PORT))
