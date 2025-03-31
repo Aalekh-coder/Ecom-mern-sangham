@@ -5,7 +5,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Textarea } from '../ui/textarea';
 import { Button } from '../ui/button';
 
-const CommonForm = ({ formControls, formData, setFormData, onSubmit, buttonText }) => {
+const CommonForm = ({ formControls, formData, setFormData, onSubmit, buttonText,isBtnDisabled }) => {
 
     function renderInputsByComponentType(getComponentItem) {
         let element = null;
@@ -61,7 +61,7 @@ const CommonForm = ({ formControls, formData, setFormData, onSubmit, buttonText 
                     </div>)
                 }
             </div>
-            <Button className="mt-2 w-full" type="submit">{buttonText || "submit"}</Button>
+            <Button disabled={isBtnDisabled} className="mt-2 w-full" type="submit">{buttonText || "submit"}</Button>
         </form>
     )
 }

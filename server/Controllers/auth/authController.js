@@ -58,6 +58,8 @@ const loginUser = async (req, res) => {
         id: existingUser._id,
         role: existingUser.role,
         email: existingUser.email,
+        userName:existingUser.userName
+
       },
       "getljni4736ver4g#2e3d",
       { expiresIn: "60m" }
@@ -70,6 +72,7 @@ const loginUser = async (req, res) => {
         email: existingUser.email,
         role: existingUser.role,
         id: existingUser._id,
+        userName:existingUser.userName
       },
     });
   } catch (error) {
