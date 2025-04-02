@@ -5,10 +5,10 @@ const addToCart = async (req, res) => {
   try {
     const { userId, productId, quantity } = req.body;
 
-    if (!userId || !productId || !quantity <= 0) {
+    if (!userId || !productId || !quantity) {
       return res.status(400).json({
         success: false,
-        message: "Invaild data provided",
+        message: "Invaild data provided!",
       });
     }
 
@@ -50,6 +50,8 @@ const addToCart = async (req, res) => {
     });
   }
 };
+
+
 const fetchCartItem = async (req, res) => {
   try {
     const { userId } = req.params;
@@ -62,7 +64,7 @@ const fetchCartItem = async (req, res) => {
     }
 
     const cart = await Cart.findOne({ userId }).populate({
-      path: "item.productId",
+      path: "items.productId",
       select: "image title price salePrice",
     });
 
@@ -111,7 +113,7 @@ const updateCartItemQty = async (req, res) => {
   try {
     const { userId, productId, quantity } = req.body;
 
-    if (!userId || !productId || !quantity <= 0) {
+    if (!userId || !productId || !quantity) {
       return res.status(400).json({
         success: false,
         message: "Invaild data provided",
@@ -173,12 +175,11 @@ const updateCartItemQty = async (req, res) => {
 
 const deleteCartItem = async (req, res) => {
   try {
-
     const { userId, productId } = req.params;
     if (!userId || !productId) {
       return res.status(400).json({
         success: false,
-        message:"Invaild data product"
+        message:"Invaild data provided"
       })
     }
 
@@ -187,6 +188,7 @@ const deleteCartItem = async (req, res) => {
       select:"image title price salePrice",
     })
 
+
     if (!cart) {
       return res.status(404).json({
         success: true,
@@ -194,11 +196,11 @@ const deleteCartItem = async (req, res) => {
       });
     }
 
-    cart.items = cart.items.filter(item => item.productId._id.toString());
+    cart.items = cart.items.filter(item => item.productId._id.toString() !== productId);
 
     await cart.save()
 
-    await Cart.populate({
+    await cart.populate({
       path: "items.productId",
       select:"image title price salePrice",
     })

@@ -20,10 +20,13 @@ function HeaderRightContent() {
   const navigation = useNavigate()
   const dispatch = useDispatch()
   const [openCartSheet, setOpenCartSheet] = useState(false);
+  const {cartItems} = useSelector(state => state.shopCart)
 
   function handleLogout() {
     dispatch(logoutUser())
   }
+
+  console.log(cartItems);
 
   return <div className="flex lg:items-center lg:flex-row flex-col gap-4">
     <Sheet open={openCartSheet} onOpenChange={()=> setOpenCartSheet(false)}>
@@ -59,8 +62,6 @@ function HeaderRightContent() {
 }
 
 const ShoppingHeader = () => {
-  const { isAuthenticated } = useSelector(state => state.auth)
-
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">

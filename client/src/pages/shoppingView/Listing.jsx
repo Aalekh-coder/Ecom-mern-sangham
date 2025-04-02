@@ -4,11 +4,12 @@ import ShoppingProductTile from '@/components/shoppingView/ProductTile'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { sortOptions } from '@/config'
+import { addToCart, fetchCartItem } from '@/store/shop/cartSlice'
 import { fetchAllFilteredProducts, fetchProductDetails } from '@/store/shop/ProductSlice'
 import { ArrowUpDownIcon } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom';
 
 
 function createSearchParamsHelper(filterParams) {
@@ -26,11 +27,14 @@ function createSearchParamsHelper(filterParams) {
 
 const Listing = () => {
   const dispatch = useDispatch();
-  const { productList,productDetails } = useSelector(state => state.shopProducts);
+  const { productList, productDetails } = useSelector(state => state.shopProducts);
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
+  const { user } = useSelector(state => state.auth);
+
+
 
 
   function handleSort(value) {
@@ -64,29 +68,36 @@ const Listing = () => {
   }
 
   function handleAddtoCart(getCurrentProductId) {
-  console.log(getCurrentProductId);
-}
+    dispatch(addToCart({ userId: user?.id, productId: getCurrentProductId, quantity: 1 })).then(data => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItem(user?.id))
+      }
+
+    })
+  }
 
   useEffect(() => {
     setSort("price-lowtohigh");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {})
   }, []);
-  
+
   useEffect(() => {
     if (filters && Object.keys(filters).length > 0) {
       const createQueryString = createSearchParamsHelper(filters)
       setSearchParams(new URLSearchParams(createQueryString))
     }
-  },[filters])
+  }, [filters])
 
   useEffect(() => {
-    if(filters !== null && sort !== null)
-    dispatch(fetchAllFilteredProducts({filterParams:filters, sortParams:sort}))
-  }, [dispatch,sort,filters]);
+    if (filters !== null && sort !== null)
+      dispatch(fetchAllFilteredProducts({ filterParams: filters, sortParams: sort }))
+  }, [dispatch, sort, filters]);
 
   useEffect(() => {
-    if(productDetails !== null) setOpenDetailDialog(true)
-  },[productDetails])
+    if (productDetails !== null) setOpenDetailDialog(true)
+  }, [productDetails])
+
+ 
 
   return (
     <div className='grid grid-col-1 md:grid-cols-[300px_1fr] gap-6 p-4 md:p-6'>
@@ -120,7 +131,7 @@ const Listing = () => {
           }
         </div>
       </div>
-      <ProductDetailsDialog open={openDetailDialog} setOpen={setOpenDetailDialog} productDetails={productDetails}/>
+      <ProductDetailsDialog open={openDetailDialog} setOpen={setOpenDetailDialog} productDetails={productDetails} />
     </div>
   )
 }

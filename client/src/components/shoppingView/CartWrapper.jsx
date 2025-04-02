@@ -2,7 +2,7 @@ import React from 'react'
 import { SheetContent, SheetHeader, SheetTitle } from '../ui/sheet'
 import { Button } from '../ui/button'
 
-const UserCartWrapper = () => {
+const UserCartWrapper = ({cartItems}) => {
     return (
         <SheetContent className="sm:max-w-md">
             <SheetHeader>
