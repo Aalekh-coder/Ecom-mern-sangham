@@ -12,6 +12,10 @@ connectToDB();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.get("/", (req, res) => {
+  res.send("hello welcome to api of ecom mern stack")
+})
+
 app.use(
   cors({
     origin: "http://localhost:5173",
