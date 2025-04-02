@@ -1,31 +1,52 @@
 import axios from "axios";
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
 const initialState = {
   cartItems: [],
   isLoading: false,
 };
 
-export const addToCart = createAsyncThunk("cart/addToCart", async ({ userId, productId, quantity }) => {
-    const response = await axios.post("http://localhost:3000/api/shop/cart/add", { userId, productId, quantity });
-    return response.data
-})
+export const addToCart = createAsyncThunk(
+  "cart/addToCart",
+  async ({ userId, productId, quantity }) => {
+    const response = await axios.post(
+      "https://ecom-mern-sangham-backend.onrender.com/api/shop/cart/add",
+      { userId, productId, quantity }
+    );
+    return response.data;
+  }
+);
 
-export const fetchCartItem = createAsyncThunk("cart/fetchCartItem", async (userId) => {
-    const response = await axios.get(`http://localhost:3000/api/shop/cart/get/${userId}`);
-    return response.data
-})
+export const fetchCartItem = createAsyncThunk(
+  "cart/fetchCartItem",
+  async (userId) => {
+    const response = await axios.get(
+      `https://ecom-mern-sangham-backend.onrender.com/api/shop/cart/get/${userId}`
+    );
+    return response.data;
+  }
+);
 
-export const deleteCartItem = createAsyncThunk("cart/deleteCartItem", async ({ userId, productId }) => {
-    const response = await axios.delete(`http://localhost:3000/api/shop/cart/${userId}/${productId}`);
-    return response.data
-})
+export const deleteCartItem = createAsyncThunk(
+  "cart/deleteCartItem",
+  async ({ userId, productId }) => {
+    const response = await axios.delete(
+      `https://ecom-mern-sangham-backend.onrender.com/api/shop/cart/${userId}/${productId}`
+    );
+    return response.data;
+  }
+);
 
-export const updateCartItemQty = createAsyncThunk("cart/updateCartItemQty", async ({ userId, productId, quantity }) => {
-    const response = await axios.put("http://localhost:3000/api/shop/cart/update-cart", { userId, productId, quantity });
-    return response.data
-})
+export const updateCartItemQty = createAsyncThunk(
+  "cart/updateCartItemQty",
+  async ({ userId, productId, quantity }) => {
+    const response = await axios.put(
+      "https://ecom-mern-sangham-backend.onrender.com/api/shop/cart/update-cart",
+      { userId, productId, quantity }
+    );
+    return response.data;
+  }
+);
 
 const shoppingCartSlice = createSlice({
   name: "shoppingCart",
@@ -80,4 +101,4 @@ const shoppingCartSlice = createSlice({
   },
 });
 
-export default shoppingCartSlice
+export default shoppingCartSlice;

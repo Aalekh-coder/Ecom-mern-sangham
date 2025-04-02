@@ -11,7 +11,7 @@ export const registerUser = createAsyncThunk(
   "/auth/register",
   async (formData) => {
     const response = await axios.post(
-      "http://localhost:3000/api/auth/register",
+      "https://ecom-mern-sangham-backend.onrender.com/api/auth/register",
       formData,
       { withCredentials: true }
     );
@@ -21,7 +21,7 @@ export const registerUser = createAsyncThunk(
 
 export const checkAuth = createAsyncThunk("/auth/check-auth", async () => {
   const response = await axios.get(
-    "http://localhost:3000/api/auth/check-auth",
+    "https://ecom-mern-sangham-backend.onrender.com/api/auth/check-auth",
 
     {
       withCredentials: true,
@@ -36,7 +36,7 @@ export const checkAuth = createAsyncThunk("/auth/check-auth", async () => {
 
 export const loginUser = createAsyncThunk("/auth/login", async (formData) => {
   const response = await axios.post(
-    "http://localhost:3000/api/auth/login",
+    "https://ecom-mern-sangham-backend.onrender.com/api/auth/login",
     formData,
     { withCredentials: true }
   );
@@ -44,7 +44,8 @@ export const loginUser = createAsyncThunk("/auth/login", async (formData) => {
 });
 export const logoutUser = createAsyncThunk("/auth/logout", async () => {
   const response = await axios.post(
-    "http://localhost:3000/api/auth/logout",{},
+    "https://ecom-mern-sangham-backend.onrender.com/api/auth/logout",
+    {},
     { withCredentials: true }
   );
   return response.data;
@@ -98,12 +99,12 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
-      }).addCase(logoutUser.fulfilled, (state) => {
+      })
+      .addCase(logoutUser.fulfilled, (state) => {
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
-      })
-      ;
+      });
   },
 });
 
