@@ -63,6 +63,10 @@ const Listing = () => {
     dispatch(fetchProductDetails(getCurrentProductId));
   }
 
+  function handleAddtoCart(getCurrentProductId) {
+  console.log(getCurrentProductId);
+}
+
   useEffect(() => {
     setSort("price-lowtohigh");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {})
@@ -112,7 +116,7 @@ const Listing = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {
-            productList && productList.length > 0 ? productList.map(productItem => <ShoppingProductTile key={productItem._id} product={productItem} handleGetProductDetails={handleGetProductDetails} />) : <div>Not product Found</div>
+            productList && productList.length > 0 ? productList.map(productItem => <ShoppingProductTile key={productItem._id} product={productItem} handleGetProductDetails={handleGetProductDetails} handleAddtoCart={handleAddtoCart} />) : <div>Not product Found</div>
           }
         </div>
       </div>

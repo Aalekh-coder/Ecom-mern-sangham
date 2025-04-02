@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter } from '../ui/card'
 import { Badge } from '../ui/badge'
 import { Button } from '../ui/button'
 
-const ShoppingProductTile = ({ product,handleGetProductDetails }) => {
+const ShoppingProductTile = ({ product,handleGetProductDetails,handleAddtoCart }) => {
     return (
         <Card className="w-full max-w-sm mx-auto mt-6">
             <div className='relative' onClick={()=> handleGetProductDetails(product?._id)}>
@@ -19,7 +19,6 @@ const ShoppingProductTile = ({ product,handleGetProductDetails }) => {
                     <span className='text-sm text-muted-foreground'>{product?.category.charAt(0).toUpperCase() + product?.category.slice(1)}</span>
                     <span className='text-sm text-muted-foreground'>{product?.brand.charAt(0).toUpperCase() + product?.brand.slice(1)}</span>
 
-                    {/* name.charAt(0).toUpperCase() + name.slice(1); */}
                 </div>
                 <div className='flex justify-between items-center mb-2'>
                     <span className={`${product?.salePrice > 0 ? "line-through" : ""} text-lg font-semibold text-primary`}>${product?.price}</span>
@@ -31,7 +30,7 @@ const ShoppingProductTile = ({ product,handleGetProductDetails }) => {
                 </div>
             </CardContent>
             <CardFooter>
-                <Button className="w-full">Add to cart</Button>
+                <Button className="w-full" onClick={()=> handleAddtoCart(product?._id)}>Add to cart</Button>
             </CardFooter>
         </Card>
     )

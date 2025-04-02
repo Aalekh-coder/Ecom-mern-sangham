@@ -7,6 +7,8 @@ import { shoppingViewHeaderMenuItems } from "@/config"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu"
 import { Avatar, AvatarFallback } from "../ui/avatar"
 import { logoutUser } from "@/store/authSlice"
+import UserCartWrapper from "./CartWrapper"
+import { useState } from "react"
 
 function MenuItem() {
   return <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">{
@@ -17,16 +19,20 @@ function HeaderRightContent() {
   const { user } = useSelector(state => state.auth);
   const navigation = useNavigate()
   const dispatch = useDispatch()
+  const [openCartSheet, setOpenCartSheet] = useState(false);
 
   function handleLogout() {
     dispatch(logoutUser())
   }
 
   return <div className="flex lg:items-center lg:flex-row flex-col gap-4">
-    <Button variant="outline" size="icon">
-      <ShoppingCart className="w-6 h-6" />
-      <span className="sr-only">User cart</span>
-    </Button>
+    <Sheet open={openCartSheet} onOpenChange={()=> setOpenCartSheet(false)}>
+      <Button onClick={()=>setOpenCartSheet(true)} variant="outline" size="icon">
+        <ShoppingCart className="w-6 h-6" />
+        <span className="sr-only">User cart</span>
+      </Button>
+        <UserCartWrapper />
+    </Sheet>
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar className="bg-black">
@@ -37,7 +43,7 @@ function HeaderRightContent() {
         <DropdownMenuLabel>logged in as {user?.userName.charAt(0).toUpperCase() + user?.userName.slice(1)}</DropdownMenuLabel>
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem onClick={()=> navigation("/shop/account")}>
+        <DropdownMenuItem onClick={() => navigation("/shop/account")}>
           <UserCog className="mr-2 h-4 w-4" />
           Account
         </DropdownMenuItem>
