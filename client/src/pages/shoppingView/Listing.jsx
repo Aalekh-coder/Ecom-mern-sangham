@@ -4,12 +4,13 @@ import ShoppingProductTile from '@/components/shoppingView/ProductTile'
 import { Button } from '@/components/ui/button'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { sortOptions } from '@/config'
-import { addToCart, fetchCartItem } from '@/store/shop/cartSlice'
+import { addToCart, fetchCartItems } from '@/store/shop/cartSlice'
 import { fetchAllFilteredProducts, fetchProductDetails } from '@/store/shop/ProductSlice'
 import { ArrowUpDownIcon } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom';
+import toast from 'react-hot-toast'
 
 
 function createSearchParamsHelper(filterParams) {
@@ -70,7 +71,8 @@ const Listing = () => {
   function handleAddtoCart(getCurrentProductId) {
     dispatch(addToCart({ userId: user?.id, productId: getCurrentProductId, quantity: 1 })).then(data => {
       if (data?.payload?.success) {
-        dispatch(fetchCartItem(user?.id))
+        dispatch(fetchCartItems(user?.id));
+        toast.success("Product is add to cart")
       }
 
     })

@@ -8,11 +8,25 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import { Avatar, AvatarFallback } from "../ui/avatar"
 import { logoutUser } from "@/store/authSlice"
 import UserCartWrapper from "./CartWrapper"
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { fetchCartItems } from "@/store/shop/cartSlice"
+import { Label } from "../ui/label"
 
 function MenuItem() {
+  const navigate = useNavigate()
+
+  function handleNavigate(getCurrentItem) {
+    sessionStorage.removeItem("filters");
+    const currentFilter = getCurrentItem.id !== "home" ? {
+      category: [getCurrentItem.id]
+    } : null
+    
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter))
+    navigate(getCurrentItem.path)
+}
+
   return <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row">{
-    shoppingViewHeaderMenuItems.map((menuItem => <Link className="text-sm font-medium" key={menuItem.id} to={menuItem.path}>{menuItem.label}</Link>))}</nav>
+    shoppingViewHeaderMenuItems.map((menuItem => <Label onClick={()=> handleNavigate(menuItem)} className="text-sm font-medium cursor-pointer" key={menuItem.id} >{menuItem.label}</Label>))}</nav>
 }
 
 function HeaderRightContent() {
@@ -20,21 +34,25 @@ function HeaderRightContent() {
   const navigation = useNavigate()
   const dispatch = useDispatch()
   const [openCartSheet, setOpenCartSheet] = useState(false);
-  // const {cartItems} = useSelector(state => state.shopCart)
+  const { cartItems } = useSelector(state => state.shopCart)
+
 
   function handleLogout() {
     dispatch(logoutUser())
   }
 
-  // console.log(cartItems);
+  useEffect(() => {
+    dispatch(fetchCartItems(user?.id))
+  }, [dispatch]);
+
 
   return <div className="flex lg:items-center lg:flex-row flex-col gap-4">
-    <Sheet open={openCartSheet} onOpenChange={()=> setOpenCartSheet(false)}>
-      <Button onClick={()=>setOpenCartSheet(true)} variant="outline" size="icon">
+    <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+      <Button onClick={() => setOpenCartSheet(true)} variant="outline" size="icon">
         <ShoppingCart className="w-6 h-6" />
         <span className="sr-only">User cart</span>
       </Button>
-        <UserCartWrapper />
+      <UserCartWrapper cartItems={cartItems && cartItems.items && cartItems.items.length > 0 ? cartItems.items : []} />
     </Sheet>
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
