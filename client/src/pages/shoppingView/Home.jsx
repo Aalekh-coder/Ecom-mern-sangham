@@ -4,7 +4,7 @@ import bannerTwo from "../../assets/banner-2.webp"
 import bannerThree from "../../assets/banner-3.webp"
 import bannerFour from "../../assets/account.jpg"
 
-import { BabyIcon, Binoculars, Cat, Check, CheckCheck, ChevronLeftIcon, ChevronRightIcon, CloudLightning, Glasses,  Shirt, ShirtIcon, UmbrellaIcon, WatchIcon } from "lucide-react"
+import { BabyIcon, Binoculars, Cat, Check, CheckCheck, ChevronLeftIcon, ChevronRightIcon, CloudLightning, Glasses, Shirt, ShirtIcon, UmbrellaIcon, WatchIcon } from "lucide-react"
 import { Card, CardContent } from "@/components/ui/card"
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -25,7 +25,7 @@ const categories = [
 
 const brand = [
   { id: "nike", label: "Nike", icons: Check },
-  { id: "adidas", label: "Adidas", icons: CheckCheck},
+  { id: "adidas", label: "Adidas", icons: CheckCheck },
   { id: "puma", label: "Puma", icons: Cat },
   { id: "levi", label: "Levi's", icons: Binoculars },
   { id: "zara", label: "Zara", icons: Shirt },
@@ -33,7 +33,7 @@ const brand = [
 ]
 const Home = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const {productList,productDetails} = useSelector( state=> state.shopProducts)
+  const { productList, productDetails } = useSelector(state => state.shopProducts)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { user } = useSelector(state => state.auth)
@@ -41,19 +41,19 @@ const Home = () => {
 
   const slides = [bannerOne, bannerTwo, bannerThree, bannerFour];
 
-  function handleNavigateToListingPage(getCurrentItem,section) {
+  function handleNavigateToListingPage(getCurrentItem, section) {
     sessionStorage.removeItem("filters");
     const currentFilter = {
-      [section]:[getCurrentItem.id]
+      [section]: [getCurrentItem.id]
     }
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
     navigate("/shop/listing")
   }
 
-    function handleGetProductDetails(getCurrentProductId) {
-      dispatch(fetchProductDetails(getCurrentProductId));
+  function handleGetProductDetails(getCurrentProductId) {
+    dispatch(fetchProductDetails(getCurrentProductId));
   }
-  
+
   function handleAddtoCart(getCurrentProductId) {
     dispatch(
       addToCart({
@@ -70,8 +70,8 @@ const Home = () => {
   }
 
   useEffect(() => {
-    if(productDetails !== null) setOpenDetailsDialog(true)
-  },[productDetails])
+    if (productDetails !== null) setOpenDetailsDialog(true)
+  }, [productDetails])
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -82,11 +82,11 @@ const Home = () => {
   }, [])
 
   useEffect(() => {
-    dispatch(fetchAllFilteredProducts({filterParams:{}, sortParams:"price-lowtohigh"}))
-  },[dispatch])
+    dispatch(fetchAllFilteredProducts({ filterParams: {}, sortParams: "price-lowtohigh" }))
+  }, [dispatch])
 
 
-  
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="relative w-full h-[600px] overflow-hidden">{
@@ -103,7 +103,7 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Shop by category</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">{
-            categories.map((item) => <Card onClick={()=> handleNavigateToListingPage(item,"category")} key={item.id} className="cursor-pointer hover:shadow-lg transition-shadow ">
+            categories.map((item) => <Card onClick={() => handleNavigateToListingPage(item, "category")} key={item.id} className="cursor-pointer hover:shadow-lg transition-shadow ">
               <CardContent className="flex flex-col items-center justify-center p-6">
                 <item.icons className="w-12 h-12 mb-4 text-primary" />
                 <span className="font-bold">{item.label}</span>
@@ -117,7 +117,7 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Shop by Brand</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">{
-            brand.map((item) => <Card onClick={()=> handleNavigateToListingPage(item,"brand")} key={item.id} className="cursor-pointer hover:shadow-lg transition-shadow ">
+            brand.map((item) => <Card onClick={() => handleNavigateToListingPage(item, "brand")} key={item.id} className="cursor-pointer hover:shadow-lg transition-shadow ">
               <CardContent className="flex flex-col items-center justify-center p-6">
                 <item.icons className="w-12 h-12 mb-4 text-primary" />
                 <span className="font-bold">{item.label}</span>
@@ -132,10 +132,10 @@ const Home = () => {
           <h2 className="text-3xl font-bold text-center mb-8">Featured Products</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {
-              productList && productList.length? productList.map((product)=><ShoppingProductTile handleGetProductDetails={handleGetProductDetails} product={product} handleAddtoCart={handleAddtoCart} />) : <div>Some Error while Fetching Reload the page</div>
+              productList && productList.length ? productList.map((product) => <ShoppingProductTile key={product?._id} handleGetProductDetails={handleGetProductDetails} product={product} handleAddtoCart={handleAddtoCart} />) : <div>Some Error while Fetching Reload the page</div>
             }
           </div>
-          
+
         </div>
       </section>
       <ProductDetailsDialog open={openDetailsDialog} setOpen={setOpenDetailsDialog} productDetails={productDetails} />

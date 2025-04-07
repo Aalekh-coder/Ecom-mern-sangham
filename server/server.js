@@ -5,7 +5,8 @@ const cors = require("cors");
 const authRouter = require("./Routes/authRoute");
 const adminProductRoute = require("./Routes/admin/productRoute");
 const shopProductRouter = require("./Routes/Shop/productsRoutes");
-const shopCartRouter = require("./Routes/Shop/cartRoutes")
+const shopCartRouter = require("./Routes/Shop/cartRoutes");
+const shopAddressRouter = require("./Routes/Shop/addressRoutes")
 
 connectToDB();
 
@@ -36,6 +37,7 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductRoute);
 app.use("/api/shop/products",shopProductRouter)
-app.use("/api/shop/cart",shopCartRouter)
+app.use("/api/shop/cart", shopCartRouter);
+app.use("/api/shop/address", shopAddressRouter);
 
 app.listen(PORT,()=> console.log(`http://localhost:${PORT}`))
