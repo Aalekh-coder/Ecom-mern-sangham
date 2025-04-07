@@ -1,3 +1,3 @@
 # Ecom-mern-sangham
 
-http://localhost:3000
+https://ecom-mern-sangham-backend.onrender.com
