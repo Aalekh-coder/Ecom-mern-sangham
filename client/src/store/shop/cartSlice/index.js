@@ -10,7 +10,7 @@ export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ userId, productId, quantity }) => {
     const response = await axios.post(
-      "https://ecom-mern-sangham-backend.onrender.com/api/shop/cart/add",
+      "http://localhost:3000/api/shop/cart/add",
       { userId, productId, quantity }
     );
     return response.data;
@@ -21,7 +21,7 @@ export const fetchCartItems = createAsyncThunk(
   "cart/fetchCartItems",
   async (userId) => {
     const response = await axios.get(
-      `https://ecom-mern-sangham-backend.onrender.com/api/shop/cart/get/${userId}`
+      `http://localhost:3000/api/shop/cart/get/${userId}`
     );
     return response.data;
   }
@@ -31,7 +31,7 @@ export const deleteCartItem = createAsyncThunk(
   "cart/deleteCartItem",
   async ({ userId, productId }) => {
     const response = await axios.delete(
-      `https://ecom-mern-sangham-backend.onrender.com/api/shop/cart/${userId}/${productId}`
+      `http://localhost:3000/api/shop/cart/${userId}/${productId}`
     );
     return response.data;
   }
@@ -41,7 +41,7 @@ export const updateCartQuantity = createAsyncThunk(
   "/cart/updateCartQuantity",
   async ({ userId, productId, quantity }) => {
     const response = await axios.put(
-      "https://ecom-mern-sangham-backend.onrender.com/api/shop/cart/update-cart",
+      "http://localhost:3000/api/shop/cart/update-cart",
       { userId, productId, quantity }
     );
     return response.data;
