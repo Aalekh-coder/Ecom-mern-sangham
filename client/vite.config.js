@@ -9,13 +9,9 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  // server: {
-  //   proxy: {
-  //     "/": {
-  //       target: "https://ecom-mern-sangham-backend.onrender.com",
-  //       changeOrigin: true,
-  //       rewrite: (path) => path.replace(/^\/api/, ""),
-  //     },
-  //   },
-  // },
+  server: {
+    proxy: {
+      "/api":"http://localhost:3000"
+    },
+  },
 });
