@@ -21,7 +21,11 @@ app.get("/", (req, res) => {
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: [
+      "http://localhost:5173", // Local development
+      "https://ecom-mern-sangham-frontend.onrender.com",
+      "https://ecom-mern-sangham.vercel.app" // Deployed frontend
+    ],
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: [
       "Content-Type",
