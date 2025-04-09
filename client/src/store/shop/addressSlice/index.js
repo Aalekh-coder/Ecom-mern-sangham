@@ -11,7 +11,7 @@ export const addNewAddress = createAsyncThunk(
   "/addressess/addNewAddress",
   async (formData) => {
     const response = await axios.post(
-      "http://localhost:3000/api/shop/address/add",
+      "https://ecom-mern-sangham-backend.onrender.com/api/shop/address/add",
       formData
     );
     return response.data;
@@ -22,7 +22,7 @@ export const fetchAllAddress = createAsyncThunk(
   "/addressess/fetchAllAddress",
   async (userId) => {
     const response = await axios.get(
-      `http://localhost:3000/api/shop/address/get/${userId}`
+      `https://ecom-mern-sangham-backend.onrender.com/api/shop/address/get/${userId}`
     );
     return response.data;
   }
@@ -32,7 +32,7 @@ export const editAddress = createAsyncThunk(
   "/addressess/editAddress",
   async ({ userId, addressId, formData }) => {
     const response = await axios.put(
-      `http://localhost:3000/api/shop/address/edit/${userId}/${addressId}`,
+      `https://ecom-mern-sangham-backend.onrender.com/api/shop/address/edit/${userId}/${addressId}`,
       formData
     );
     return response.data;
@@ -43,7 +43,7 @@ export const deleteAddress = createAsyncThunk(
   "/addressess/deleteAddress",
   async ({ userId, addressId }) => {
     const response = await axios.delete(
-      `http://localhost:3000/api/shop/address/delete/${userId}/${addressId}`
+      `https://ecom-mern-sangham-backend.onrender.com/api/shop/address/delete/${userId}/${addressId}`
     );
     return response.data;
   }
