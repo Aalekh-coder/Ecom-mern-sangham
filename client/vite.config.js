@@ -11,7 +11,7 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/api": "https://ecom-mern-sangham-backend.onrender.com",
+      "/api/": "https://ecom-mern-sangham-backend.onrender.com",
     },
   },
 });
