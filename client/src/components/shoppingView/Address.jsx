@@ -15,13 +15,14 @@ const initialAddressFormData = {
     notes: ""
 }
 
-const Address = ({setCurrentSelectedAddress}) => {
+const Address = ({ setCurrentSelectedAddress, selectedId }) => {
 
     const [formData, setFormData] = useState(initialAddressFormData);
     const [currentEditedId, setCurrentEditedId] = useState(null);
     const dispatch = useDispatch();
     const { user } = useSelector(state => state.auth);
     const { addressList } = useSelector(state => state.shopAddress);
+
 
     function handleManageAddress(e) {
         e.preventDefault()
@@ -56,7 +57,7 @@ const Address = ({setCurrentSelectedAddress}) => {
     }
 
     function handleDeleteAddress(getCurrentAddress) {
-        console.log({ userId: user?.id, addressId: getCurrentAddress})
+        console.log({ userId: user?.id, addressId: getCurrentAddress })
         dispatch(deleteAddress({ userId: user?.id, addressId: getCurrentAddress })).then((data) => {
             if (data?.payload?.success) {
                 dispatch(fetchAllAddress(user?.id));
@@ -88,13 +89,14 @@ const Address = ({setCurrentSelectedAddress}) => {
 
     return (
         <Card className="">
-            <div className='mb-5 p-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 '>
+            <div className='mb-5 p-3 grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5'>
                 {
                     addressList && addressList.length > 0 ? addressList.map(signleAddressItem => <AddressCard key={signleAddressItem?._id}
                         addressInfo={signleAddressItem}
                         handleDeleteAddress={handleDeleteAddress}
                         handleEditAddress={handleEditAddress}
                         setCurrentSelectedAddress={setCurrentSelectedAddress}
+                        selectedId={selectedId}
 
                     />)
                         : null

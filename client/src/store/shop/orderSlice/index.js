@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  approvalUrl: null,
+  approvalURL: null,
   isLoading: false,
   orderId: null,
   orderList: [],
@@ -13,7 +13,7 @@ export const createNewOrder = createAsyncThunk(
   "/order/createNewOrder",
   async (orderData) => {
     const response = await axios.post(
-      "https://ecom-mern-sangham-backend.onrender.com/api/shop/order/create",
+      "http://localhost:3000/api/shop/order/create",
       orderData
     );
     return response.data;
@@ -24,7 +24,7 @@ export const capturePayment = createAsyncThunk(
   "/order/capturePayment",
   async ({ paymentId, payerId, orderId }) => {
     const response = await axios.post(
-      "https://ecom-mern-sangham-backend.onrender.com/api/shop/order/capture",
+      "http://localhost:3000/api/shop/order/capture",
       { paymentId, payerId, orderId }
     );
     return response.data;
@@ -35,16 +35,18 @@ export const getAllOrdersByUserId = createAsyncThunk(
   "/order/getAllOrdersByUserId ",
   async (userId) => {
     const response = await axios.get(
-      `https://ecom-mern-sangham-backend.onrender.com/api/shop/order/list/${userId}`
+      `http://localhost:3000/api/shop/order/list/${userId}`
     );
     return response.data;
   }
 );
+
+
 export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails ",
   async (id) => {
     const response = await axios.get(
-      `https://ecom-mern-sangham-backend.onrender.com/api/shop/order/details/${id}`
+      `http://localhost:3000/api/shop/order/details/${id}`
     );
     return response.data;
   }
@@ -65,7 +67,7 @@ const shoppingOrderSlice = createSlice({
       })
       .addCase(createNewOrder.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.approvalUrl = action.payload.approvalUrl;
+        state.approvalURL = action.payload.approvalUrl;
         state.orderId = action.payload.orderId;
         sessionStorage.setItem(
           "currentOrderId",
@@ -74,7 +76,7 @@ const shoppingOrderSlice = createSlice({
       })
       .addCase(createNewOrder.rejected, (state) => {
         state.isLoading = false;
-        state.approvalUrl = null;
+        state.approvalURL = null;
         state.orderId = null;
       })
 

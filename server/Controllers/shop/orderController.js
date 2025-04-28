@@ -1,11 +1,13 @@
 const paypal = require("../../helps/paypal");
 const Order = require("../../Models/Order");
 const Cart = require("../../Models/Cart")
+const Product = require("../../Models/Product")
 
 const createOrder = async (req, res) => {
   try {
     const {
       userId,
+      cartId,
       cartItems,
       addressInfo,
       orderStatus,
@@ -16,7 +18,6 @@ const createOrder = async (req, res) => {
       orderUpdateDate,
       paymentId,
       payerId,
-      cartId
     } = req.body;
 
     const create_payment_json = {
@@ -56,8 +57,9 @@ const createOrder = async (req, res) => {
           message: "Error while creating paypal payment",
         });
       } else {
-        const newlyCreatedOrder = new Order({
+          const newlyCreatedOrder = new Order({
           userId,
+          cartId,
           cartItems,
           addressInfo,
           orderStatus,
@@ -68,7 +70,6 @@ const createOrder = async (req, res) => {
           orderUpdateDate,
           paymentId,
           payerId,
-          cartId
         });
           
         await newlyCreatedOrder.save();
@@ -105,6 +106,19 @@ const capturePayment = async (req, res) => {
     order.orderStatus = "confirmed";
     order.paymentId = paymentId;
     order.payerId = payerId;
+
+    for (let item of order.cartItems) {
+      let product = await Product.findById(item.productId);
+
+      if (!product) {
+        return res.status(404).json({
+          success: false,
+          message:`Not enough stock for this product ${product?.title}`
+        })
+      }
+      product.totalStock -= item.quantity;
+      await product.save()
+    }
 
     const getCartId = order.cartId;
     await Cart.findByIdAndDelete(getCartId)
@@ -151,7 +165,9 @@ const getAllOrderByUser = async (req, res) => {
     });
   }
 };
-const getAllOrderDetails = async (req, res) => {
+
+
+const getOrderDetails = async (req, res) => {
   try {
     const { id } = req.params;
     const orders = await Order.findById(id);
@@ -177,4 +193,4 @@ const getAllOrderDetails = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, capturePayment,getAllOrderByUser,getAllOrderDetails };
+module.exports = { createOrder, capturePayment,getAllOrderByUser,getOrderDetails };

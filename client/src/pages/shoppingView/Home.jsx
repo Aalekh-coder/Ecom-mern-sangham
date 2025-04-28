@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom"
 import toast from "react-hot-toast"
 import { addToCart, fetchCartItems } from "@/store/shop/cartSlice"
 import ProductDetailsDialog from "@/components/shoppingView/ProductDetails"
+import { getFeatureImages } from "@/store/commonSlice"
 
 const categories = [
   { id: "men", label: "Men", icons: ShirtIcon },
@@ -32,14 +33,16 @@ const brand = [
   { id: "h&m", label: "H&M", icons: Glasses },
 ]
 const Home = () => {
+  const { featureImageList } = useSelector(state => state.commonFeatures);
   const [currentSlide, setCurrentSlide] = useState(0);
   const { productList, productDetails } = useSelector(state => state.shopProducts)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { user } = useSelector(state => state.auth)
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  
 
-  const slides = [bannerOne, bannerTwo, bannerThree, bannerFour];
+  const slides = [bannerOne, bannerTwo, bannerThree, "https://cdn3.f-cdn.com//files/download/186511195/shopping%20special.jpg?width=780&height=438&fit=crop","https://graphicsfamily.com/wp-content/uploads/edd/2021/07/Professional-E-Commerce-Shoes-Banner-Design.jpg","https://img.freepik.com/free-psd/banner-template-online-shopping_23-2148559048.jpg?semt=ais_hybrid&w=740","https://img.freepik.com/free-vector/gradient-horizontal-sale-banner-template_23-2149011568.jpg"];
 
   function handleNavigateToListingPage(getCurrentItem, section) {
     sessionStorage.removeItem("filters");
@@ -85,7 +88,9 @@ const Home = () => {
     dispatch(fetchAllFilteredProducts({ filterParams: {}, sortParams: "price-lowtohigh" }))
   }, [dispatch])
 
-
+  useEffect(() => {
+    dispatch(getFeatureImages())
+  }, [dispatch])
 
   return (
     <div className="flex flex-col min-h-screen">

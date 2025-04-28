@@ -7,7 +7,7 @@ import axios from "axios"
 import { Skeleton } from "../ui/skeleton"
 
 const ProductimageUpload = ({ imageFile, setImageFile, uploadedImageUrl, setUploadedImageUrl, imageLoadingState,
-    setimageLoadingState, isEditMode }) => {
+    setimageLoadingState, isEditMode,isCustomStyling=false }) => {
 
     const inputRef = useRef(null)
 
@@ -36,7 +36,7 @@ const ProductimageUpload = ({ imageFile, setImageFile, uploadedImageUrl, setUplo
         setimageLoadingState(true);
         const data = new FormData();
         data.append("my_file", imageFile);
-        const response = await axios.post("https://ecom-mern-sangham-backend.onrender.com/api/admin/products/upload-image", data)
+        const response = await axios.post("http://localhost:3000/api/admin/products/upload-image", data)
         console.log(data, "iam running");
         if (response?.data?.success) {
             setUploadedImageUrl(response?.data?.result?.url);
@@ -50,7 +50,7 @@ const ProductimageUpload = ({ imageFile, setImageFile, uploadedImageUrl, setUplo
     }, [imageFile])
 
     return (
-        <div className="w-full max-w-md mx-auto mt-4">
+        <div className={`w-full  mt-4 ${isCustomStyling? "":"max-w-md mx-auto"}`}>
             <Label className="text-lg font-semibold mb-2 block">Upload Image</Label>
             <div onDragOver={handleDragOver} onDrop={handleDrop} className={`${isEditMode ? "opacity-60" : ""} border-2 border-dashed rounded-lg p-4 `}>
                 <Input className="hidden" id="image-upload" type="file" ref={inputRef} onChange={handleImageFileChange} disabled={isEditMode} />

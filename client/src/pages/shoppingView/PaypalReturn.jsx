@@ -3,13 +3,16 @@ import { capturePayment } from '@/store/shop/orderSlice';
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+// paymentId=PAYID-NAFQS3A0YA36926WX118390J&token=EC-73H37667X9654801L&PayerID=ZJCLM6NM4YV7Y
 
 const PaypalReturn = () => {
     const dispatch = useDispatch();
     const location = useLocation();
     const params = new URLSearchParams(location.search);
     const paymentId = params.get("paymentId");
-    const payerId = params.get("payerID");
+    const payerId = params.get("PayerID");
+    console.log(paymentId,
+        payerId);
 
     useEffect(() => {
         if (paymentId && payerId) {

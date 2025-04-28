@@ -16,11 +16,10 @@ const Orders = () => {
   const { orderList, OrderDetails } = useSelector(state => state.shopOrder);
 
   function handleFetchOrderDetails(getId) {
-    console.log(getId,"getId");
     dispatch(getOrderDetails(getId))
   }
 
-  console.log(OrderDetails,"OrderDetails");
+
 
   useEffect(() => {
     if (OrderDetails !== null) setOpenDetailsDialog(true)
@@ -49,11 +48,11 @@ const Orders = () => {
             </TableHeader>
             <TableBody>
               {
-                orderList && orderList.length > 0 ? orderList.map(orderItem => <TableRow>
+                orderList && orderList.length > 0 ? orderList.map(orderItem => <TableRow key={orderItem?._id}>
                   <TableCell>{orderItem?._id}</TableCell>
                   <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
                   <TableCell>
-                    <Badge className={`"py-1 px-3" ${orderItem?.orderStatus === "confirmed" ? "bg-green-700" : "bg-yellow-500"}`}>
+                    <Badge className={`"py-1 px-3" ${orderItem?.orderStatus === "confirmed" ? "bg-green-700" : orderItem?.orderStatus === "rejected" ?"bg-red-700":"bg-black"}`}>
                       {orderItem?.orderStatus}
                     </Badge>
                   </TableCell>

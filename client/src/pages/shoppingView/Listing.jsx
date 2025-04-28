@@ -34,8 +34,9 @@ const Listing = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [openDetailDialog, setOpenDetailDialog] = useState(false);
   const { user } = useSelector(state => state.auth);
+  const {cartItems} = useSelector(state => state.shopCart)
 
-
+const categorySearchParams = searchParams.get("category")
 
 
   function handleSort(value) {
@@ -68,7 +69,21 @@ const Listing = () => {
     dispatch(fetchProductDetails(getCurrentProductId));
   }
 
-  function handleAddtoCart(getCurrentProductId) {
+  function handleAddtoCart(getCurrentProductId,getTotalStock) {
+    
+    let getCartItems = cartItems.items || [];
+
+    if (getCartItems.length) {
+      const indeOfCurrentItem = getCartItems.findIndex(item => item.productId === getCurrentProductId);
+      if (indeOfCurrentItem > -1) {
+        const getQuantity = getCartItems[indeOfCurrentItem].quantity;
+        if (getQuantity + 1 > getTotalStock) {
+          toast.error(`Only ${getQuantity} quantity can be added for this item`);
+          return
+        }
+      }
+
+    }
     dispatch(addToCart({ userId: user?.id, productId: getCurrentProductId, quantity: 1 })).then(data => {
       if (data?.payload?.success) {
         dispatch(fetchCartItems(user?.id));
@@ -81,7 +96,7 @@ const Listing = () => {
   useEffect(() => {
     setSort("price-lowtohigh");
     setFilters(JSON.parse(sessionStorage.getItem("filters")) || {})
-  }, []);
+  }, [categorySearchParams]);
 
   useEffect(() => {
     if (filters && Object.keys(filters).length > 0) {
@@ -99,7 +114,7 @@ const Listing = () => {
     if (productDetails !== null) setOpenDetailDialog(true)
   }, [productDetails])
 
- 
+
 
   return (
     <div className='grid grid-col-1 md:grid-cols-[300px_1fr] gap-6 p-4 md:p-6'>

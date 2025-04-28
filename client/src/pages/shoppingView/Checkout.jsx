@@ -12,10 +12,9 @@ const Checkout = () => {
   const { user } = useSelector((state) => state.auth);
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
   const [isPaymentStart, setIsPaymentStart] = useState(false);
-  const {approvalUrl} = useSelector(state => state.shopOrder)
+  const {approvalURL} = useSelector(state => state.shopOrder)
   const dispatch = useDispatch()
 
-  
 
   const totalCartAmount = cartItems && cartItems.items && cartItems.items.length > 0 ? cartItems.items.reduce((sum, currentItem) => sum + (
     currentItem?.salePrice > 0 ? currentItem?.salePrice : currentItem?.price
@@ -24,6 +23,15 @@ const Checkout = () => {
 
 
   function handleInitiatePaypalPayment() {
+
+    if (cartItems.length === 0) {
+      toast.error("Your cart is empty. please add items to proceed")
+      return
+    }
+    if (currentSelectedAddress === null) {
+      toast.error("Please select one address to proceed")
+      return
+    }
 
     if (cartItems.length === 0) {
       toast.error("Please put some product in a cart");
@@ -61,9 +69,11 @@ const Checkout = () => {
       orderUpdateDate: new Date(),
       paymentId:"",
       payerId:"",
-    }
+    };
+    
+
     dispatch(createNewOrder(orderDate)).then((data) => {
-      console.log(data);
+      console.log(data,"data");
       if (data?.payload?.success) {
         setIsPaymentStart(true)
       } else {
@@ -72,8 +82,8 @@ const Checkout = () => {
     })
   }
 
-  if (approvalUrl) {
-    window.location.href = approvalUrl
+  if (approvalURL) {
+    window.location.href = approvalURL
   }
 
 
@@ -83,10 +93,10 @@ const Checkout = () => {
         <img src={img} className='h-full w-full object-cover object-center' />
       </div>
       <div className='grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5 p-5'>
-        <Address setCurrentSelectedAddress={setCurrentSelectedAddress} />
+        <Address selectedId={currentSelectedAddress} setCurrentSelectedAddress={setCurrentSelectedAddress} />
         <div className="flex flex-col gap-4">
           {
-            cartItems.items && cartItems.items.length > 0 ? cartItems?.items.map((item) => <UserCartItemsContent cartItems={item} />) : null
+            cartItems.items && cartItems.items.length > 0 ? cartItems?.items.map((item) => <UserCartItemsContent key ={item?._id} cartItem={item} />) : null
           }
 
           <div className="mt-8 space-y-4">
@@ -97,10 +107,10 @@ const Checkout = () => {
           </div>
 
           <div className='mt-4 w-full'>
-            <Button onClick={handleInitiatePaypalPayment} className="w-full bg-blue-600">Checkout with paypal</Button>
+            <Button onClick={handleInitiatePaypalPayment} className="w-full bg-blue-600">{isPaymentStart? <span className='animate-pulse'>Processing Paypal Payment...</span>:"Checkout with paypal"}</Button>
           </div>
         </div>
-
+ 
       </div>
     </div>
   )

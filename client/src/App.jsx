@@ -21,22 +21,24 @@ import { checkAuth } from "./store/authSlice"
 import { Skeleton } from "./components/ui/skeleton"
 import PaypalReturn from "./pages/shoppingView/PaypalReturn"
 import PaymentSuccess from "./pages/shoppingView/PaymentSuccess"
+import Search from "./pages/shoppingView/Search"
 
 const App = () => {
-  const {isAuthenticated,user,isLoading} = useSelector(state=> state.auth)
+  const { isAuthenticated, user, isLoading } = useSelector(state => state.auth)
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(checkAuth())
-  },[dispatch])
+  }, [dispatch])
 
-  if(isLoading) return <Skeleton className=""/>
+  if (isLoading) return <Skeleton className="" />
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Routes>
+        <Route path="/"element={<CheckAuth isAuthenticated={isAuthenticated} user={user} ><AuthLayout /></CheckAuth>}/>
         <Route path="/auth" element={<CheckAuth isAuthenticated={isAuthenticated} user={user} ><AuthLayout /></CheckAuth>}>
-          <Route path="login" element={<AuthLogin/>} />
+          <Route path="login" element={<AuthLogin />} />
           <Route path="register" element={<AuthRegister />} />
         </Route>
 
@@ -56,7 +58,8 @@ const App = () => {
           <Route path="checkout" element={<Checkout />} />
           <Route path="account" element={<Account />} />
           <Route path="paypal-return" element={<PaypalReturn />} />
-          <Route path="paypal-success" element={<PaymentSuccess />} />
+          <Route path="payment-success" element={<PaymentSuccess />} />
+          <Route path="search" element={<Search />} />
 
         </Route>
 
