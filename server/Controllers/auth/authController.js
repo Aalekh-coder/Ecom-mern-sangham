@@ -62,10 +62,10 @@ const loginUser = async (req, res) => {
 
       },
       "getljni4736ver4g#2e3d",
-      { expiresIn: "10h" }
+      { expiresIn: "1d" }
     );
 
-    res.cookie("token", token, { httpOnly: true, secure: false }).json({
+    res.cookie("token", token, { httpOnly: true, secure: true }).json({
       success: true,
       message: "Logged in successfully",
       user: {
