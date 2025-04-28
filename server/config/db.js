@@ -2,8 +2,7 @@ const { connect } = require("mongoose");
 
 const connectToDB = async () => {
   try {
-    await connect(
-      "mongodb+srv://dheetaalekh:N8BA4zrqyyzdwWNf@cluster0.e72b8.mongodb.net/",
+    await connect(process.env.MONGO_URI,
       { dbName: "EcomMern" }
     );
     console.log(`Connected to DB in NODE_ENV mode`);

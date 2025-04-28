@@ -11,11 +11,12 @@ const shopAddressRouter = require("./Routes/Shop/addressRoutes");
 const shopOrderRouter = require("./Routes/Shop/orderRoutes")
 const shopSearchRouter = require("./Routes/Shop/searchRoute");
 const shopReviewRouter = require("./Routes/Shop/reviewRoutes");
+require("dotenv").config()
 
-const productList = require("../inde")
+
 
 const commonFetauresRouter = require("./Routes/common/featureRoutes");
-const Product = require("./Models/Product");
+
 
 connectToDB();
 
@@ -28,7 +29,7 @@ app.get("/", (req, res) => {
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: process.env.CLIENT_BASE_URL,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: [
       "Content-Type",
@@ -54,11 +55,6 @@ app.use("/api/shop/search", shopSearchRouter);
 app.use("/api/shop/review", shopReviewRouter);
 app.use("/api/common/feature", commonFetauresRouter);
 
-app.post("/insert", async(req, res) => {
-  const product = await Product.create(productList);
-  res.status(201).json({
-    product
-  })
-})
+
 
 app.listen(PORT,()=> console.log(`http://localhost:${PORT}`))
