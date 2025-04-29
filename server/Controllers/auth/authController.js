@@ -65,16 +65,30 @@ const loginUser = async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    res.cookie("token", token, { httpOnly: true, secure: true }).json({
-      success: true,
+    // res.cookie("token", token, { httpOnly: true, secure: true }).json({
+    //   success: true,
+    //   message: "Logged in successfully",
+    //   user: {
+    //     email: existingUser.email,
+    //     role: existingUser.role,
+    //     id: existingUser._id,
+    //     userName:existingUser.userName
+    //   },
+    // });
+
+    // for production 
+
+    res.status(200).json({
+        success: true,
       message: "Logged in successfully",
-      user: {
-        email: existingUser.email,
-        role: existingUser.role,
-        id: existingUser._id,
-        userName:existingUser.userName
-      },
-    });
+        token,
+        user: {
+          email: existingUser.email,
+          role: existingUser.role,
+          id: existingUser._id,
+          userName:existingUser.userName
+        },
+      });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -91,8 +105,29 @@ const logout =  (req, res) => {
   })
 };
 
+// const authMiddleware = async (req, res, next) => {
+//   const token = req.cookies.token;
+//   if (!token) return res.status(401).json({
+//     success: false,
+//     message:"unauthorized"
+//   })
+
+//   try {
+//     const decoded = jwt.verify(token, "getljni4736ver4g#2e3d");
+//     req.user = decoded;
+//     next()
+//   } catch (error) {
+//     res.status(401).json({
+//       success:false,
+//       message:"unauthorized user!"
+//     })
+//   }
+// }
+
+// for production 
 const authMiddleware = async (req, res, next) => {
-  const token = req.cookies.token;
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1]
   if (!token) return res.status(401).json({
     success: false,
     message:"unauthorized"
