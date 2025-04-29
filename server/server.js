@@ -29,18 +29,18 @@ app.get("/", (req, res) => {
 
 app.use(
   cors(
-    // {
-    // origin: process.env.CLIENT_BASE_URL,
-    // methods: ["GET", "POST", "PUT", "DELETE"],
-    // allowedHeaders: [
-    //   "Content-Type",
-    //   "Authorization",
-    //   "Cache-Control",
-    //   "Expires",
-    //   "Pragma",
-    // ],
-    // credentials: true,
-    // }
+    {
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Cache-Control",
+      "Expires",
+      "Pragma",
+    ],
+    credentials: true,
+    }
   )
 );
 app.use(cookieParser());
