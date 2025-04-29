@@ -28,9 +28,8 @@ app.get("/", (req, res) => {
 })
 
 app.use(
-  cors(
-    {
-    origin: "*",
+  cors({
+    origin: ["http://localhost:5173", "https://ecom-mern-sangham-frontend.onrender.com"], // Add your frontend URLs here
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: [
       "Content-Type",
@@ -39,9 +38,8 @@ app.use(
       "Expires",
       "Pragma",
     ],
-    credentials: true,
-    }
-  )
+    credentials: true, // Allow cookies and credentials
+  })
 );
 app.use(cookieParser());
 app.use(express.json());
